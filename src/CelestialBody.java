@@ -2,16 +2,29 @@ import java.awt.*;
 
 // This class represents celestial bodies like stars, planets, asteroids, etc..
 public class CelestialBody {
+    // gravitational constant
+    private static final double G = 6.6743e-11;
+    // one astronomical unit (AU) is the average distance of earth to the sun.
+    private static final double AU = 150e9;
+
 
     //TODO: change modifiers.
-    public String name;
-    public double mass;
-    public double radius;
-    public Vector3 position; // position of the center.
-    public Vector3 currentMovement;
-    public Color color; // for drawing the body.
+    private String name;
+    private double mass;
+    private double radius;
+    private Vector3 position; // position of the center.
+    private Vector3 currentMovement;
+    private Color color; // for drawing the body.
 
     //TODO: define constructor.
+    public CelestialBody(String name, double mass, double radius, Vector3 position, Vector3 currentMovement, Color color) {
+        this.name = name;
+        this.mass = mass;
+        this.radius = radius;
+        this.position = position;
+        this.currentMovement = currentMovement;
+        this.color = color;
+    }
 
     // Returns the distance between this celestial body and the specified 'body'.
     public double distanceTo(CelestialBody body) {
@@ -22,9 +35,12 @@ public class CelestialBody {
 
     // Returns a vector representing the gravitational force exerted by 'body' on this celestial body.
     public Vector3 gravitationalForce(CelestialBody body) {
-
         //TODO: implement method.
-        return null;
+        Vector3 direction = body.position.minus(this.position);
+        double r = direction.length();
+        direction.normalize();
+        double force = G * this.mass * body.mass / (r * r);
+        return direction.times(force);
     }
 
     // Moves this body to a new position, according to the specified force vector 'force' exerted
@@ -33,6 +49,11 @@ public class CelestialBody {
     public void move(Vector3 force) {
 
         //TODO: implement method.
+        Vector3 newPosition = this.currentMovement.plus(this.position.plus(force.times(1 / this.mass)));
+        Vector3 newMovement = newPosition.minus(this.position); // new minus old position.
+
+        this.position = newPosition;
+        this.currentMovement = newMovement;
     }
 
     // Returns a string with the information about this celestial body including
@@ -41,7 +62,7 @@ public class CelestialBody {
     public String toString() {
 
         //TODO: implement method.
-        return "";
+        return String.format("[%s, %s kg, radius: %s m, position: %s m, movement: %s m/s.]", this.name, this.mass, this.radius, this.position.toString(), this.currentMovement.toString());
     }
 
     // Prints the information about this celestial body including
@@ -50,6 +71,7 @@ public class CelestialBody {
     public void print() {
 
         //TODO: implement method.
+        System.out.println(toString());
     }
 
     // Draws the celestial body to the current StdDraw canvas as a dot using 'color' of this body.
@@ -58,6 +80,7 @@ public class CelestialBody {
     public void draw() {
 
         //TODO: implement method.
+        position.drawAsDot(this.radius, this.color);
     }
 
 }

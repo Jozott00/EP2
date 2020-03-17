@@ -1,7 +1,4 @@
-
-import java.sql.SQLOutput;
 import java.util.Arrays;
-import java.util.Map;
 
 // Space is the actual program (executable class) using objects of class 'Body'.
 public class Space {
@@ -65,7 +62,7 @@ public class Space {
         rocket.setPosition(0,0,0);
         rocket.setVelocity(0,0, 0);
         rocket.setMass(ROCKET_START_MASS);
-//        System.out.println("Rocket landed after " + rocketFlightInSeconds(rocket) + " seconds");
+        System.out.println("Rocket landed after " + rocketFlightInSeconds(rocket) + " seconds");
 
         rocket.setVelocity(0,0,0);
         rocket.setPosition(0,0,0);
