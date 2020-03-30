@@ -26,6 +26,19 @@ public class CelestialBody {
         this.color = color;
     }
 
+    public CelestialBody(CelestialBody body, Vector3 position, Vector3 velocity) {
+        this.name = body.name;
+        this.mass = body.mass;
+        this.radius = body.radius;
+        this.color = body.color;
+        this.position = position;
+        this.currentMovement = velocity;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
     // Returns the distance between this celestial body and the specified 'body'.
     public double distanceTo(CelestialBody body) {
 
