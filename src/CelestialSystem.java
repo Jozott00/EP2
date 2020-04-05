@@ -17,7 +17,7 @@ public class CelestialSystem {
     public boolean add(CelestialBody body) {
         //TODO: implement method.
         if(head == null) {
-            head = new MyNode(body, null);
+            head = new MyNode(body, null, null);
             sizeCount++;
             return true;
         }
@@ -27,7 +27,7 @@ public class CelestialSystem {
             if(last.next() == null) break;
             last = last.next();
         }
-        last.setNext(new MyNode(body, null));
+        last.setNext(new MyNode(body, null, last));
         sizeCount++;
         return true;
     }
@@ -80,4 +80,97 @@ public class CelestialSystem {
     }
 
     //TODO: Define additional class(es) implementing the linked list (either here or outside class).
+
+    // Inserts the specified 'body' at the specified position
+    // in this list if 'i' is a valid index and there is no body
+    // in the list with the same name as that of 'body'.
+    // Shifts the element currently at that position (if any) and
+    // any subsequent elements to the right (adds one to their
+    // indices). The first element of the list has the index 0.
+    // Returns 'true' if the list was changed as a result of
+    // the call, 'false' otherwise.
+    public boolean add(int i, CelestialBody body) {
+        //TODO: implement method.
+        System.out.println(size());
+        if(!(this.size() > i)) return false;
+        if(this.contains(body.getName())) return false;
+
+        MyNode iNode = head;
+        for(int _i = 0; _i < i; _i++){
+            iNode = iNode.next();
+        }
+
+        MyNode newNode = new MyNode(body, iNode, iNode.prev());
+        if(iNode.prev() == null) head = newNode;
+        else iNode.prev().setNext(newNode);
+
+        iNode.setPrev(newNode);
+
+        System.out.println(iNode.getBody().getName());
+
+        sizeCount++;
+        return true;
+    }
+
+    // Returns a readable representation with the name of the
+    // system and all bodies in respective order of the list.
+    public String toString() {
+        //TODO: implement method.
+        String text = "System " + this.getName() + ": ";
+        if(head == null) return text;
+        MyNode curr = head;
+        while (true) {
+            if(curr.next() == null) return text += curr.getBody().getName();
+            text += curr.getBody().getName() + ", ";
+            curr = curr.next();
+        }
+    }
+
+
+
+    // Returns a new list that contains the same elements as this
+    // list in reverse order. The list 'this' is not changed and
+    // bodies are not duplicated (shallow copy).
+    public CelestialSystem reverse() {
+        //TODO: implement method.
+        CelestialSystem reverseList = new CelestialSystem("reverseSolarsystem");
+        if(head == null) return reverseList;
+
+        MyNode curr = head;
+        for(int i = 0; i < size(); i++) {
+            reverseList.push(curr.getBody());
+            curr = curr.next();
+        }
+
+        return reverseList;
+    }
+
+
+    //pushes new bodie element to front of list and shifts every following element to right
+    public void push(CelestialBody b) {
+        if(this.head == null) {
+            head = new MyNode(b, null, null);
+            return;
+        }
+
+        MyNode newNode = new MyNode(b, head, null);
+        head.setPrev(newNode);
+        head = newNode;
+    }
+
+    //get bodies name of system as array of string
+    public String[] getAllNames() {
+        if(head == null) return null;
+        String[] names = new String[size()];
+
+        MyNode curr = head;
+        for(int i = 0; i < size(); i++) {
+            names[i] = curr.getBody().getName();
+            curr = curr.next();
+        }
+        return names;
+    }
+
+
+
 }

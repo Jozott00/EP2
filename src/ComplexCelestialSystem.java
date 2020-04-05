@@ -18,17 +18,17 @@ public class ComplexCelestialSystem {
     public boolean add(CelestialSystem subsystem) {
         //TODO: implement method.
         if(head == null) {
-            head = new MyNode(subsystem, null);
+            head = new MyNode(subsystem, null, null);
             sizeCount++;
             return true;
         }
-        if(head.getSystem().contains(name)) return false;
+        if(head.getSystem().contains((subsystem.getName()))) return false;
         MyNode last = head;
         while (last.next() != null) {
             last = last.next();
-            if(last.getSystem().contains(name)) return false;
+            if(last.getSystem().contains((subsystem.getName()))) return false;
         }
-        last.setNext(new MyNode(subsystem, null));
+        last.setNext(new MyNode(subsystem, null, last));
         sizeCount++;
         return true;
     }
@@ -46,6 +46,7 @@ public class ComplexCelestialSystem {
 
             // search for name of body in current node's subsystem
             CelestialBody sBody = sNode.getSystem().get(name);
+
             // if a body in node's subsystem exists with the same name as give, return a new subsystem with this body
             if(sBody != null) {
                 CelestialSystem result = new CelestialSystem(name);
@@ -63,6 +64,22 @@ public class ComplexCelestialSystem {
     public int size() {
         //TODO: implement method.
         return this.sizeCount;
+    }
+
+    public boolean contains(String name) {
+        if(head == null) return false;
+
+        MyNode curr = head;
+        for(int i = 0; i < size(); i++){
+            if(curr.getSystem().getName() == name) return true;
+            String[] names = curr.getSystem().getAllNames();
+            for(String n : names) {
+                if(n == name) return true;
+            }
+            curr = curr.next();
+        }
+
+        return false;
     }
 
     //TODO: Define additional class(es) implementing a linked list (either here or outside class).
