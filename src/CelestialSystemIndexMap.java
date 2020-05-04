@@ -31,8 +31,10 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
                     break;
                 }
 
-                if (keyArray[index].equals(cb))
+                if (keyArray[index].equals(cb)) {
+                    //changed = false;
                     break;
+                }
 
                 index++;
             }
