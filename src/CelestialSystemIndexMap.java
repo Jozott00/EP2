@@ -69,7 +69,6 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
         }
 
         return false;
-
     }
 
     @Override
@@ -117,7 +116,6 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
                     h += sysArray[i].hashCode();
             }
         }
-
         return h;
     }
 
