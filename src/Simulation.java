@@ -33,19 +33,22 @@ public class Simulation {
 
             // for each body (with index i): compute the total force exerted on it.
             for (int i = 0; i < bodies.size(); i++) {
-                forceOnBody[i] = new Vector3(0,0,0); // begin with zero
+//                forceOnBody[i] = new Vector3(0,0,0); // begin with zero
+                Vector3 sumForce = new Vector3();
                 for (int j = 0; j < bodies.size(); j++) {
                     if (i == j) continue;
                     Vector3 forceToAdd = bodies.get(i).gravitationalForce(bodies.get(j));
-                    forceOnBody[i] = forceOnBody[i].plus(forceToAdd);
+                    sumForce = sumForce.plus(forceToAdd);
                 }
+                bodies.get(i).move(sumForce);
+
             }
             // now forceOnBody[i] holds the force vector exerted on body with index i.
 
             // for each body (with index i): move it according to the total force exerted on it.
-            for (int i = 0; i < bodies.size(); i++) {
-               bodies.get(i).move(forceOnBody[i]);
-            }
+//            for (int i = 0; i < bodies.size(); i++) {
+//               bodies.get(i).move(forceOnBody[i]);
+//            }
 
             // show all movements in StdDraw canvas only every 3 hours (to speed up the simulation)
             if (seconds%(3*3600) == 0) {
@@ -65,7 +68,30 @@ public class Simulation {
 
     }
 
-    //TODO: remove static methods below.
+    public static CelestialBody[] getOtherSystem() {
+        Vector3 mercuryPosistion = new Vector3(-100, 30, 5);
+        Vector3 mercuryVelocity = new Vector3(-1, 1, -1);
+
+        Vector3 venusPosistion = new Vector3(40, -150, -40);
+        Vector3 venusVelocity = new Vector3(3, 2, -4);
+
+        Vector3 earthPosistion = new Vector3(60, -120, -10);
+        Vector3 earthVelocity = new Vector3(5, -3, 2);
+
+        Vector3 marsPosistion = new Vector3(-29, -12, -51);
+        Vector3 marsVelocity = new Vector3(4, -10, -4);
+
+        CelestialBody sun = new CelestialBody("Sun", 50, 40, new Vector3(), new Vector3(), StdDraw.YELLOW);
+        CelestialBody mercury = new CelestialBody("Mercury", 12, 10, mercuryPosistion, mercuryVelocity,
+                StdDraw.GRAY);
+        CelestialBody venus = new CelestialBody("Venus", 5, 5, venusPosistion, venusVelocity,
+                StdDraw.PINK);
+        CelestialBody earth = new CelestialBody("Earth", 29, 12, earthPosistion, earthVelocity,
+                StdDraw.BLUE);
+        CelestialBody mars = new CelestialBody("Mars", 5, 3, marsPosistion, marsVelocity, StdDraw.RED);
+
+        return new CelestialBody[] { sun, mercury, venus, earth, mars };
+    }
 
 }
 

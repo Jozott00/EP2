@@ -72,6 +72,7 @@ public class CelestialBody {
     // Returns a string with the information about this celestial body including
     // name, mass, radius, position and current movement. Example:
     // "Earth, 5.972E24 kg, radius: 6371000.0 m, position: [1.48E11,0.0,0.0] m, movement: [0.0,29290.0,0.0] m/s."
+    @Override
     public String toString() {
 
         //TODO: implement method.
@@ -95,6 +96,22 @@ public class CelestialBody {
         //TODO: implement method.
         position.drawAsDot(this.radius, this.color);
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || obj.getClass() != this.getClass()) return false;
+
+        CelestialBody cb = (CelestialBody) obj;
+
+        return cb.getName().equals(this.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode() * (int) Math.pow(2, this.name.hashCode() % 5) * (int) Math.pow(2, this.name.hashCode() % 2);
+    }
+
 
 }
 

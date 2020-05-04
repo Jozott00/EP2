@@ -114,6 +114,7 @@ public class CelestialSystem {
 
     // Returns a readable representation with the name of the
     // system and all bodies in respective order of the list.
+    @Override
     public String toString() {
         //TODO: implement method.
         String text = "System " + this.getName() + ": ";
@@ -171,6 +172,30 @@ public class CelestialSystem {
         return names;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || obj.getClass() != this.getClass()) return false;
 
+        CelestialSystem system = (CelestialSystem) obj;
+
+        if(this.size() != system.size()) return false;
+
+        for(int i = 0; i < this.size(); i++) {
+            if(system.get(this.get(i).getName()) == null) return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int sum = 0;
+
+        for(int i = 0; i < this.size(); i++){
+            sum += get(i).getName().hashCode();
+        }
+
+        return sum;
+    }
 
 }
