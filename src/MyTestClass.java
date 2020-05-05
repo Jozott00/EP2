@@ -7,7 +7,7 @@ public class MyTestClass {
 
     public static void main(String[] args) {
 
-        test2();
+        test1();
 
     }
 
@@ -29,7 +29,7 @@ public class MyTestClass {
         s1.add(b0);
         s1.add(b1);
         s1.add(b2);
-        s2.add(b5);
+//        s2.add(b5);
         s2.add(b3);
         s2.add(b4);
 
@@ -41,9 +41,11 @@ public class MyTestClass {
         System.out.println(map);
         System.out.println(b0.hashCode() + ", " + b1.hashCode());
 
+        System.out.println(Arrays.toString(s1.toArray()));
+
     }
 
-    private void test1() {
+    private static void test1() {
         Random r = new Random();
 
         CelestialSystemIndexMap map = new CelestialSystemIndexMap();
@@ -61,9 +63,6 @@ public class MyTestClass {
 
         for(int i = 0; i < bodies.length/2; i++) {
             bodies[i] = new CelestialBody("b" + i, r.nextInt(), r.nextDouble(), new Vector3(), new Vector3(), Color.white );
-        }
-
-        for(int i = 0; i < bodies.length; i++) {
             systems[(i % 5)].add(bodies[i]);
         }
 

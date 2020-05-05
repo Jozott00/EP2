@@ -17,10 +17,17 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
     @Override
     public boolean add(CelestialSystem system) {
 
+        if(system == null) return false;
+
         boolean changed = false;
 
-        for (int i = 0; i < system.size(); i++) {
-            CelestialBody cb = system.get(i);
+        CelestialBody[] inputArray = system.toArray();
+
+        for(CelestialBody b : inputArray) {
+            if(this.contains(b)) return false;
+        }
+
+        for (CelestialBody cb : inputArray) {
             int index = cb.hashCode() % arraySize;
 
             while (index < arraySize) {
@@ -59,6 +66,8 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
 
     @Override
     public boolean contains(CelestialBody body) {
+        if(body == null) return false;
+
         int index = body.hashCode() % arraySize;
         if (sysArray[index] != null && keyArray[index] == body) return true;
 

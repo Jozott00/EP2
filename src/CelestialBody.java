@@ -109,7 +109,16 @@ public class CelestialBody {
 
     @Override
     public int hashCode() {
-        return this.name.hashCode() * (int) Math.pow(2, this.name.hashCode() % 5) * (int) Math.pow(2, this.name.hashCode() % 2);
+
+        int hc = name.hashCode();
+        int sum = 0;
+        for(int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            c *= 31^(name.length()-i+1) * hc/(i+1);
+            sum += c;
+        }
+
+        return sum;
     }
 
 

@@ -172,6 +172,24 @@ public class CelestialSystem {
         return names;
     }
 
+    // Returns this CelestialSystem as an Array
+    public CelestialBody[] toArray(){
+        int arrSize = this.size();
+        CelestialBody[] output = new CelestialBody[arrSize];
+
+        int index = 0; //go through output arr
+        MyNode pointer = head; //go through this
+
+        while(pointer != null && index < arrSize) {
+            output[index] = pointer.getBody();
+
+            pointer = pointer.next();
+            index++;
+        }
+
+        return output;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null || obj.getClass() != this.getClass()) return false;
