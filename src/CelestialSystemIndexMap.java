@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class CelestialSystemIndexMap implements CelestialSystemIndex {
 
-    private final int arraySize = 65;
+    private final int arraySize = 31;
 
     private CelestialBody[] keyArray = new CelestialBody[arraySize];
     private CelestialSystem[] sysArray = new CelestialSystem[arraySize];
@@ -28,13 +28,19 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
         }
 
         for (CelestialBody cb : inputArray) {
-            int index = cb.hashCode() % arraySize;
+            int index = cb.hashCode() % keyArray.length;
 
-            while (index < arraySize) {
+            while (true) {
                 if (sysArray[index] == null) {
                     sysArray[index] = system;
                     keyArray[index] = cb;
                     changed = true;
+
+                    count++;
+
+                    if(count >= 0.75 * sysArray.length)
+                        doubleMap();
+
                     break;
                 }
 
@@ -43,7 +49,7 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
                     break;
                 }
 
-                index++;
+                index = (index + 1) % keyArray.length;
             }
         }
         return changed;
@@ -51,15 +57,19 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
 
     @Override
     public CelestialSystem get(CelestialBody body) {
-        int index = body.hashCode() % arraySize;
+        if(body == null) return null;
+
+        int index = body.hashCode() % keyArray.length;
+        int startIndex = index;
 
         if (sysArray[index] != null && keyArray[index] == body) return sysArray[index];
 
-        while (index < arraySize) {
-            if (sysArray[index] == null) return null;
+        while (sysArray[index] == null) {
             if (keyArray[index].equals(body)) return sysArray[index];
 
-            index++;
+            index = (index + 1) % keyArray.length;
+            if(index == startIndex) return null;
+
         }
         return null;
     }
@@ -68,13 +78,16 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
     public boolean contains(CelestialBody body) {
         if(body == null) return false;
 
-        int index = body.hashCode() % arraySize;
+        int index = body.hashCode() % keyArray.length;
+        int startIndex = index;
+
         if (sysArray[index] != null && keyArray[index] == body) return true;
 
-        while (index < arraySize) {
-            if (sysArray[index] == null) break;
+        while (sysArray[index] != null) {
             if (keyArray[index].equals(body)) return true;
-            index++;
+
+            index = (index + 1) % keyArray.length;
+            if(index == startIndex) return false;
         }
 
         return false;
@@ -136,5 +149,16 @@ public class CelestialSystemIndexMap implements CelestialSystemIndex {
             if(i != null) sum++;
         }
         return sum;
+    }
+
+    public void doubleMap()  {
+        CelestialSystem[] oldSysArray = sysArray;
+
+        keyArray = new CelestialBody[oldSysArray.length * 2];
+        sysArray = new CelestialSystem[oldSysArray.length * 2];
+
+        for(CelestialSystem sys : oldSysArray) {
+            this.add(sys);
+        }
     }
 }

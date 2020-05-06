@@ -29,8 +29,8 @@ public class MyTestClass {
         s1.add(b0);
         s1.add(b1);
         s1.add(b2);
-//        s2.add(b5);
-        s2.add(b3);
+        s2.add(b5);
+//        s2.add(b3);
         s2.add(b4);
 
         map.add(s1);
