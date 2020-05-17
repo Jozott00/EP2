@@ -1,4 +1,4 @@
-public class CelestialSystem {
+public class CelestialSystem implements CelestialBodyCollection {
 
     //TODO: Define variables.
     private String name;
@@ -216,4 +216,12 @@ public class CelestialSystem {
         return sum;
     }
 
+    @Override
+    public CelestialBodyIterator iterator() {
+         return new MyCelestialSystemIterator(this);
+    }
+
+    public MyNode getHead() {
+        return head;
+    }
 }

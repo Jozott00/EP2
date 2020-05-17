@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Arrays;
 
 public class Simulation {
 
@@ -13,6 +14,107 @@ public class Simulation {
     // The main simulation method using instances of other classes.
     public static void main(String[] args) {
 
+//        solarSystemSimulation();
+
+        indexTreeVariantCTest();
+
+        bodySetTreeVariantCTest();
+
+    }
+
+    private static void bodySetTreeVariantCTest() {
+
+        CelestialBody a = new CelestialBody("a" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b = new CelestialBody("b" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody c = new CelestialBody("c" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody d = new CelestialBody("d" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody e = new CelestialBody("e" , 0, 0, new Vector3(), new Vector3(), Color.white );
+
+        CelestialBody b5 =  new CelestialBody("body2" , 0, 0, new Vector3(), new Vector3(), Color.white );
+
+        CelestialSystem s1 = new CelestialSystem("system1");
+        CelestialSystem s2 = new CelestialSystem("system2");
+
+        CelestialBodyNameComparator comp = new CelestialBodyNameComparator();
+
+        CelestialSystemIndexTreeVariantC tree = new CelestialSystemIndexTreeVariantC(comp);
+
+        CelestialBodyCollection bodySet = tree.bodies();
+
+        s1.add(a);
+        s1.add(d);
+        s1.add(c);
+
+        tree.add(s1);
+
+
+        System.out.println(bodySet);
+
+        CelestialSystem copy = tree.bodiesAsCelestialSystem();
+
+
+        s2.add(b);
+        s2.add(e);
+//        s2.add(b5);
+
+        tree.add(s2);
+
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(bodySet);
+
+        for(CelestialBody bo : bodySet) {
+            System.out.println(bo.getName());
+        }
+        System.out.println("\n\n" + copy);
+        System.out.println("\n\n" + tree.bodiesAsCelestialSystem());
+
+
+    }
+
+    private static void indexTreeVariantCTest() {
+
+        CelestialBody a = new CelestialBody("a" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b = new CelestialBody("b" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody c = new CelestialBody("c" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody d = new CelestialBody("d" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody e = new CelestialBody("e" , 0, 0, new Vector3(), new Vector3(), Color.white );
+
+        CelestialBody b5 =  new CelestialBody("body2" , 0, 0, new Vector3(), new Vector3(), Color.white );
+
+        CelestialSystem s1 = new CelestialSystem("system1");
+        CelestialSystem s2 = new CelestialSystem("system2");
+
+        CelestialBodyNameComparator comp = new CelestialBodyNameComparator();
+
+        CelestialSystemIndexTreeVariantC tree = new CelestialSystemIndexTreeVariantC(comp);
+
+        s1.add(a);
+        s1.add(d);
+        s1.add(c);
+
+        tree.add(s1);
+
+        System.out.println("\n Tree: " + tree);
+
+
+        s2.add(b);
+        s2.add(e);
+//        s2.add(b5);
+
+        tree.add(s2);
+
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println("\n Tree: " + tree);
+
+        for(CelestialBody bo : tree) {
+            System.out.println(bo.getName());
+        }
+
+    }
+
+    private static void solarSystemSimulation() {
         //TODO: change implementation of this method according to 'Aufgabenblatt2.md'.
         CelestialSystem bodies = ReadDataUtil.initialize(60);
         Vector3[] forceOnBody = new Vector3[bodies.size()];
@@ -57,7 +159,7 @@ public class Simulation {
 
                 // draw new positions
                 for (int i = 0; i < bodies.size(); i++) {
-                   bodies.get(i).draw();
+                    bodies.get(i).draw();
                 }
 
                 // show new positions
@@ -65,8 +167,8 @@ public class Simulation {
             }
 
         }
-
     }
+
 
     public static CelestialBody[] getOtherSystem() {
         Vector3 mercuryPosistion = new Vector3(-100, 30, 5);

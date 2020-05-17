@@ -7,7 +7,44 @@ public class MyTestClass {
 
     public static void main(String[] args) {
 
-        test1();
+        test3();
+
+    }
+
+    private static void test4() {
+
+        CelestialBody b0 = new CelestialBody("welt" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b1 = new CelestialBody("b" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b2 = new CelestialBody("c" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b3 = new CelestialBody("welt" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b4 = new CelestialBody("b4" , 0, 0, new Vector3(), new Vector3(), Color.white );
+
+        CelestialBodyNameComparator comp = new CelestialBodyNameComparator();
+
+        System.out.println(comp.compare(b0, b3));
+        System.out.println(b0.equals(b3));
+    }
+
+    private  static void test3() {
+
+        CelestialBody b0 = new CelestialBody("b0" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b1 = new CelestialBody("b1" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b2 = new CelestialBody("body2" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b3 = new CelestialBody("b3" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b4 = new CelestialBody("b4" , 0, 0, new Vector3(), new Vector3(), Color.white );
+
+        CelestialSystem s1 = new CelestialSystem("system1");
+
+        s1.add(b0);
+        s1.add(b1);
+        s1.add(b2);
+        s1.add(b3);
+        s1.add(b4);
+
+        for (CelestialBody b : s1) {
+            System.out.println(b);
+        }
+
 
     }
 

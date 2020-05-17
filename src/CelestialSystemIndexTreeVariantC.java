@@ -1,9 +1,13 @@
 //TODO: change class definition below according to specification in 'Aufgabenblatt6'.
 
-public class CelestialSystemIndexTreeVariantC implements CelestialSystemIndex {
+import java.sql.Struct;
+
+public class CelestialSystemIndexTreeVariantC implements CelestialSystemIndex, CelestialBodyIterable {
 
     private VariantCNode root;
     private CelestialBodyComparator comparator;
+
+    private int size = 0;
 
     // Initialises this index with a 'comparator' for sorting
     // the keys of this index.
@@ -26,17 +30,28 @@ public class CelestialSystemIndexTreeVariantC implements CelestialSystemIndex {
             return false;
         }
 
+        for(CelestialBody b : system) {
+           if (this.contains(b)) return false;
+        }
+
         boolean changed = false;
 
         if (root == null) {
             root = new VariantCNode(system.get(0), system, null, null, comparator);
+            size++;
             changed = true;
         } else {
-            changed = root.add(new VariantCNode(system.get(0), system, null, null, comparator));
+            if(root.add(new VariantCNode(system.get(0), system, null, null, comparator))) {
+                changed = true;
+                size++;
+            }
         }
 
         for (int i = 1; i < system.size(); i++) {
-            changed |= root.add(new VariantCNode(system.get(i), system, null, null, comparator));
+            if(root.add(new VariantCNode(system.get(i), system, null, null, comparator))) {
+                changed = true;
+                size++;
+            }
         }
 
         return changed;
@@ -73,15 +88,20 @@ public class CelestialSystemIndexTreeVariantC implements CelestialSystemIndex {
     // Returns a collection view of all entries of this index.
     public CelestialBodyCollection bodies() {
         //TODO: implement method.
-        return null;
-
+        return new CelestialBodySet(this);
     }
 
     // Returns all entries of this as a new collection.
     public CelestialSystem bodiesAsCelestialSystem() {
         //TODO: implement method.
-        return null;
 
+        CelestialSystem cs = new CelestialSystem("IndexTreeVariantC Copy");
+
+        for(CelestialBody b : this) {
+            cs.add(b);
+        }
+
+        return cs;
     }
 
     // Returns the comparator used in this index.
@@ -89,6 +109,16 @@ public class CelestialSystemIndexTreeVariantC implements CelestialSystemIndex {
         return comparator;
     }
 
+    @Override
+    public CelestialBodyIterator iterator() {
+        VariantCIterator iter = new VariantCIterator();
+        if(root != null) {root.iter(iter, false);}
+        return iter;
+    }
+
+    public int getSize() {
+        return size;
+    }
 }
 
 class VariantCNode {
@@ -160,6 +190,87 @@ class VariantCNode {
 
     }
 
+    public CelestialBody iter(VariantCIterator iter, boolean next) {
+        VariantCNode n = next ? right : this;
+        while (n != null) {
+            new VariantCIterator(n, iter);
+            n = n.left;
+        }
+        return key;
+    }
+
+
 }
+
+class VariantCIterator implements CelestialBodyIterator {
+
+    private VariantCNode node;
+    private VariantCIterator parent;
+
+    public VariantCIterator() {}
+    public VariantCIterator(VariantCNode n, VariantCIterator p){
+        node = p.node;
+        p.node = n;
+        parent = p.parent;
+        p.parent = this;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return node != null;
+    }
+
+    @Override
+    public CelestialBody next() {
+        if (node == null) return null;
+        VariantCNode todo = node;
+        node = parent.node;
+        parent = parent.parent;
+        return todo.iter(this, true);
+    }
+
+}
+
+class CelestialBodySet implements CelestialBodyCollection {
+    CelestialSystemIndexTreeVariantC tree;
+
+    public CelestialBodySet(CelestialSystemIndexTreeVariantC t) {
+        tree = t;
+    }
+
+    @Override
+    public boolean add(CelestialBody body) {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return tree.getSize();
+    }
+
+    @Override
+    public CelestialBodyIterator iterator() {
+        return tree.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return "CelestialBodySet{" +
+                "tree=" + tree +
+                '}';
+    }
+}
+
+
+/*
+    ZUSATZFRAGEN:
+
+    1. Ja, da in beiden "Sammlungen" nur die Referenzen zu den Objekten gespeichert werden.
+    Daher, die Himmelskörper bleiben immer referenziert.
+
+    2. Sie passen sich an, so wird bei dem Aufruf einer foreach-Schleife immer der aktuelle Zustand des Objekts verwendet.
+
+
+ */
 
 

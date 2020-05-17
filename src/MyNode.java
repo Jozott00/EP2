@@ -35,5 +35,4 @@ public class MyNode {
 
     public void setPrev(MyNode prev) { this.prev = prev; }
 
-
 }

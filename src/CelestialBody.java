@@ -76,7 +76,8 @@ public class CelestialBody {
     public String toString() {
 
         //TODO: implement method.
-        return String.format("[%s, %s kg, radius: %s m, position: %s m, movement: %s m/s.]", this.name, this.mass, this.radius, this.position.toString(), this.currentMovement.toString());
+        //return String.format("[%s, %s kg, radius: %s m, position: %s m, movement: %s m/s.]", this.name, this.mass, this.radius, this.position.toString(), this.currentMovement.toString());
+        return this.name;
     }
 
     // Prints the information about this celestial body including
