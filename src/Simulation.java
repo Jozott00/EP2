@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Simulation {
@@ -14,14 +16,30 @@ public class Simulation {
     // The main simulation method using instances of other classes.
     public static void main(String[] args) {
 
-//        solarSystemSimulation();
+
+        solarSystemSimulation(args);
 
 //        indexTreeVariantCTest();
 
 //        bodySetTreeVariantCTest();
 
 //        bodySetInitTest();
+    }
 
+    private static void test() throws FileFormatException {
+        String test = "2g3";
+
+        try {
+            System.out.println("1");
+            try {
+                Double.parseDouble(test);
+            } catch (NumberFormatException e){
+                throw new FileFormatException(2, "her");
+            }
+            System.out.println("2");
+        } catch (ArithmeticException e) {
+            System.out.println("fuck is aufgefangen");
+        }
     }
 
     private static void bodySetInitTest() {
@@ -66,13 +84,13 @@ public class Simulation {
 
     private static void bodySetTreeVariantCTest() {
 
-        CelestialBody a = new CelestialBody("a" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody b = new CelestialBody("b" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody c = new CelestialBody("c" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody d = new CelestialBody("d" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody e = new CelestialBody("e" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody a = new CelestialBody("a", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody b = new CelestialBody("b", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody c = new CelestialBody("c", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody d = new CelestialBody("d", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody e = new CelestialBody("e", 0, 0, new Vector3(), new Vector3(), Color.white);
 
-        CelestialBody b5 =  new CelestialBody("body2" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b5 = new CelestialBody("body2", 0, 0, new Vector3(), new Vector3(), Color.white);
 
         CelestialSystem s1 = new CelestialSystem("system1");
         CelestialSystem s2 = new CelestialSystem("system2");
@@ -105,7 +123,7 @@ public class Simulation {
         System.out.println(s2);
         System.out.println(bodySet);
 
-        for(CelestialBody bo : bodySet) {
+        for (CelestialBody bo : bodySet) {
             System.out.println(bo.getName());
         }
         System.out.println("\n\n" + copy);
@@ -116,13 +134,13 @@ public class Simulation {
 
     private static void indexTreeVariantCTest() {
 
-        CelestialBody a = new CelestialBody("a" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody b = new CelestialBody("b" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody c = new CelestialBody("c" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody d = new CelestialBody("d" , 0, 0, new Vector3(), new Vector3(), Color.white );
-        CelestialBody e = new CelestialBody("e" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody a = new CelestialBody("a", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody b = new CelestialBody("b", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody c = new CelestialBody("c", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody d = new CelestialBody("d", 0, 0, new Vector3(), new Vector3(), Color.white);
+        CelestialBody e = new CelestialBody("e", 0, 0, new Vector3(), new Vector3(), Color.white);
 
-        CelestialBody b5 =  new CelestialBody("body2" , 0, 0, new Vector3(), new Vector3(), Color.white );
+        CelestialBody b5 = new CelestialBody("body2", 0, 0, new Vector3(), new Vector3(), Color.white);
 
         CelestialSystem s1 = new CelestialSystem("system1");
         CelestialSystem s2 = new CelestialSystem("system2");
@@ -150,64 +168,94 @@ public class Simulation {
         System.out.println(s2);
         System.out.println("\n Tree: " + tree);
 
-        for(CelestialBody bo : tree) {
+        for (CelestialBody bo : tree) {
             System.out.println(bo.getName());
         }
 
     }
 
-    private static void solarSystemSimulation() throws FileNotFoundException, FileFormatException {
+    private static void solarSystemSimulation(String[] args) {
         //TODO: change implementation of this method according to 'Aufgabenblatt2.md'.
-        CelestialSystem bodies = ReadDataUtil.initialize(60);
-        Vector3[] forceOnBody = new Vector3[bodies.size()];
 
-        StdDraw.setCanvasSize(500, 500);
-        StdDraw.setXscale(-2*AU,2*AU);
-        StdDraw.setYscale(-2*AU,2*AU);
-        double pixelWidth = 4*AU/500;
-        StdDraw.enableDoubleBuffering();
-        StdDraw.clear(StdDraw.BLACK);
+        if(args.length != 2) {
+            System.out.println("Error: wrong number of arguments (2 arguments needed).");
+            System.exit(0);
+        }
 
-        double seconds = 0;
+        try {
+            int day = Integer.parseInt(args[1]);
 
-        // simulation loop
-        while(true) {
-
-            seconds++; // each iteration computes the movement of the celestial bodies within one second.
-
-            // for each body (with index i): compute the total force exerted on it.
-            for (int i = 0; i < bodies.size(); i++) {
-//                forceOnBody[i] = new Vector3(0,0,0); // begin with zero
-                Vector3 sumForce = new Vector3();
-                for (int j = 0; j < bodies.size(); j++) {
-                    if (i == j) continue;
-                    Vector3 forceToAdd = bodies.get(i).gravitationalForce(bodies.get(j));
-                    sumForce = sumForce.plus(forceToAdd);
-                }
-                bodies.get(i).move(sumForce);
-
+            if(!(0 < day && day < 367)) {
+                System.out.println("Error: Invalid day argument(" + day +").");
+                System.exit(0);
             }
-            // now forceOnBody[i] holds the force vector exerted on body with index i.
 
-            // for each body (with index i): move it according to the total force exerted on it.
-//            for (int i = 0; i < bodies.size(); i++) {
-//               bodies.get(i).move(forceOnBody[i]);
+            CelestialSystem bodies = ReadDataUtil.initialize(day, args[0]);
+
+            Vector3[] forceOnBody = new Vector3[bodies.size()];
+
+            StdDraw.setCanvasSize(500, 500);
+            StdDraw.setXscale(-2 * AU, 2 * AU);
+            StdDraw.setYscale(-2 * AU, 2 * AU);
+            double pixelWidth = 4 * AU / 500;
+            StdDraw.enableDoubleBuffering();
+            StdDraw.clear(StdDraw.BLACK);
+
+            double seconds = 0;
+
+//            // simulation loop
+//            while (true) {
+//
+//                seconds++; // each iteration computes the movement of the celestial bodies within one second.
+//
+//                // for each body (with index i): compute the total force exerted on it.
+//                for (int i = 0; i < bodies.size(); i++) {
+//                    //                forceOnBody[i] = new Vector3(0,0,0); // begin with zero
+//                    Vector3 sumForce = new Vector3();
+//                    for (int j = 0; j < bodies.size(); j++) {
+//                        if (i == j) continue;
+//                        Vector3 forceToAdd = bodies.get(i).gravitationalForce(bodies.get(j));
+//                        sumForce = sumForce.plus(forceToAdd);
+//                    }
+//                    bodies.get(i).move(sumForce);
+//
+//                }
+//                // now forceOnBody[i] holds the force vector exerted on body with index i.
+//
+//                // for each body (with index i): move it according to the total force exerted on it.
+//                //            for (int i = 0; i < bodies.size(); i++) {
+//                //               bodies.get(i).move(forceOnBody[i]);
+//                //            }
+//
+//                // show all movements in StdDraw canvas only every 3 hours (to speed up the simulation)
+//                if (seconds % (3 * 3600) == 0) {
+//                    // clear old positions (exclude the following line if you want to draw orbits).
+//                    StdDraw.clear(StdDraw.BLACK);
+//
+//                    // draw new positions
+//                    for (int i = 0; i < bodies.size(); i++) {
+//                        bodies.get(i).draw();
+//                    }
+//
+//                    // show new positions
+//                    StdDraw.show();
+//                }
 //            }
 
-            // show all movements in StdDraw canvas only every 3 hours (to speed up the simulation)
-            if (seconds%(3*3600) == 0) {
-                // clear old positions (exclude the following line if you want to draw orbits).
-                StdDraw.clear(StdDraw.BLACK);
+            System.out.println("Running Simulation...");
 
-                // draw new positions
-                for (int i = 0; i < bodies.size(); i++) {
-                    bodies.get(i).draw();
-                }
-
-                // show new positions
-                StdDraw.show();
-            }
-
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: File \"" + e.getPath() +"\" not found.");
+            System.exit(0);
+        } catch (FileFormatException e) {
+            System.out.println("Error: File \""+ e.getFileName() +" does not have required format in line " + e.getLine() +" (aborting).");
+            System.exit(0);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Day argument not of type int");
+            System.exit(0);
+        }
+        catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 
@@ -234,7 +282,7 @@ public class Simulation {
                 StdDraw.BLUE);
         CelestialBody mars = new CelestialBody("Mars", 5, 3, marsPosistion, marsVelocity, StdDraw.RED);
 
-        return new CelestialBody[] { sun, mercury, venus, earth, mars };
+        return new CelestialBody[]{sun, mercury, venus, earth, mars};
     }
 
 }

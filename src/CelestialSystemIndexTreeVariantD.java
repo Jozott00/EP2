@@ -84,21 +84,75 @@ interface VariantDNode {
     // Adds the specified 'node' to the tree of which 'this' is the root
     // node. If the tree already has a node with the same key as that
     // of 'node' the tree remains unchanged.
+
+    /**
+     * 
+     * @param node mit key, der alles enthält um hinzugefügt zu werden
+     * @return nothing
+     * 
+     * @see
+     * Vorbedingung: Node darf nicht null sein.
+     * <li>Nachbedigung: Falls node null ist, wird eine NullPointerException geworfen. Wenn Node bereits in tree vorhanden -> tree bleibt unverändert. 
+     * Wenn nicht, wird der node an die richtige stelle in tree gesetzt. Falls der tree leer ist, wird node als root des trees genommen. Es wird der selbe node wirder zurückgeliefert.</li>
+     * 
+     */
     VariantDNode add(VariantDNode node);
 
     // Returns the celestial system with which a body is associated, if 'body' is a key
     // which is contained in the this tree (the tree of which 'this' is the root node).
     // If body is not contained as a key, 'null' is returned.
+
+    /**
+     * 
+     * @param body (Himmelskörper), der zu einem bestimmten System gehört
+     * @return system
+     * 
+     * @see
+     * Vorbedingung: Body darf nicht null sein. Body muss eine korrekte CelestialBody-Struktur haben, mit Namen haben.
+     * <li>Nachbedigung: Falls body null ist, wird eine NullPointerException geworfen. Falls body nicht als key vorhanden ist, wird null returned. Falls vorhanden wird das dazugehörige System der Klasse <b>CelestialSystem.</b> returned</li>
+     * 
+     */
     CelestialSystem get(CelestialBody body);
 
     // Returns a readable representation of the tree of which 'this' is the root node.
+
+    /**
+     * 
+     * 
+     * @return String
+     * 
+     * @see
+     * Nachbedigung: Gibt einen String zurück der den Inhalt des Nodes darstellt.
+     * 
+     */
     String toString();
 
     // Returns an iterator over all keys of the tree of which 'this' is the root node.
     // 'parent' is the iterator of the parent (path from the root).
+    
+
+     /**
+     * 
+     * @param parant ein iterator, der alle vorherigen nodes beinhaltet
+     * @return iterator
+     * 
+     * @see
+     * Vorbedingung: parent muss alle vorhergegangen nodes korrekt iterieren.
+     * <li>Nachbedigung: Gibt einen iterator zurück, der durch alle vorhergehenden inklusive dem momentanen Node durchiteriert ohne fehler.</li>
+     * 
+     */
     VariantDNodeIterator iterator(VariantDNodeIterator parent);
 
     // Returns the key of this node.
+     /**
+     * 
+     * 
+     * @return CelestialBody
+     * 
+     * @see
+     * Nachbedigung: Gibt den Key des Nodes als CelestialBody zurück.
+     * 
+     */
     CelestialBody getKey();
 
 }

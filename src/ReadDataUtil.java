@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 
 public class ReadDataUtil {
@@ -12,7 +9,7 @@ public class ReadDataUtil {
 
     // Returns the solar system (inner planets only) in the configuration on the specified day.
     // Precondition: day > 10 && day < 356 (precondition needed due to velocity calculation).
-    public static CelestialSystem initialize(int day) throws FileNotFoundException, FileFormatException {
+    public static CelestialSystem initialize(int day, String path) throws FileNotFoundException, FileFormatException {
         CelestialBody sun = null, mercury = null, venus = null, earth = null, mars = null;
 
         // TODO: implement suitable constructor in class 'CelestialBody' and include block:
@@ -43,9 +40,7 @@ public class ReadDataUtil {
         solarsystem.add(earth);
         solarsystem.add(mars);
 
-        try
-        }
-        readConfiguration("Configuration.csv", solarsystem, day);
+        readConfiguration(path, solarsystem, day);
 
         solarsystem.add(sun);
         return solarsystem;
@@ -144,26 +139,49 @@ public class ReadDataUtil {
     public static void readConfiguration(String path, CelestialBodyCollection bodies, int day) throws FileFormatException, FileNotFoundException {
         // TODO: implement method.
 
-        Deque<String> linesStack = new ArrayDeque<String>();
+        ArrayList<String> lineList = new ArrayList<>();
 
         try {
             BufferedReader in = null;
+
+            File file = new File(path);
+            if(!file.exists())
+                throw new FileNotFoundException(path);
+
+
             try {
-                Reader r = new FileReader(path);
+                Reader r = new FileReader(file);
                 in = new BufferedReader(r);
 
                 String line;
                 while ((line = in.readLine()) != null) {
-                    linesStack.add(line);
+                    lineList.add(line);
                 }
 
-                System.out.println(linesStack);
+                String[] lines = lineList.toArray(new String[lineList.size()]);
 
+                for (int i = 1; i < lines.length - 1; i++) {
+                    String[] fields = lines[i].split(";");
 
-                String[] lines = (String[]) linesStack.toArray();
+                    if(fields.length != 6) throw new FileFormatException(i+1,path);
+
+                    for (int j = 1; j < fields.length; j++) {
+                        try {
+                            if(j == 1 || j == 2) {
+                                int ps = Integer.parseInt(fields[j]);
+                                if(ps <= 0) throw new FileFormatException(i+1, path);
+                            }
+                            if (j > 2) Double.parseDouble(fields[j]);
+                        } catch (NumberFormatException e) {
+                            throw new FileFormatException(i+1, path);
+                        }
+                    }
+                }
+
                 for (CelestialBody body : bodies) {
                     for (int i = 1; i < lines.length - 1; i++) {
                         String[] fields = lines[i].split(";");
+
                         Vector3 velocity = new Vector3(0, 0, 0);
                         Vector3 position = new Vector3(0, 0, 0);
 
@@ -203,11 +221,8 @@ public class ReadDataUtil {
                 if (in != null)
                     in.close();
             }
-        } catch (FileNotFoundException fnfe) {
-            if(fnfe != null) throw new FileNotFoundException("test");
+        } catch (IOException e) {
+            throw new FileNotFoundException(path);
         }
-
     }
-
-
 }

@@ -1,9 +1,16 @@
 import java.io.IOException;
 
-public class FileNotFoundException extends IOException {
+public class FileNotFoundException extends Exception {
 
     // TODO: implement class
-    public FileNotFoundException(String Path) {
-        super("Error: File \"" + Path + "\" not found.");
+
+    private String path;
+
+    public FileNotFoundException(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
