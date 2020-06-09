@@ -16,9 +16,51 @@ public class Simulation {
 
 //        solarSystemSimulation();
 
-        indexTreeVariantCTest();
+//        indexTreeVariantCTest();
 
-        bodySetTreeVariantCTest();
+//        bodySetTreeVariantCTest();
+
+//        bodySetInitTest();
+
+    }
+
+    private static void bodySetInitTest() {
+        double AU = 150e9;
+
+        CelestialBody sun = null, mercury = null, venus = null, earth = null, mars = null;
+
+        // TODO: implement suitable constructor in class 'CelestialBody' and include block:
+        // Parameters: name, mass, radius, position, velocity, color
+
+        sun = new CelestialBody("Sol", 1.989e30, 696340e3, new Vector3(0, 0, 0),
+                new Vector3(0, 0, 0), StdDraw.YELLOW);
+
+        mercury = new CelestialBody("Mercury", 0.330114e23, 2439.4e3,
+                new Vector3(0, 0, 0), new Vector3(0, 0, 0), StdDraw.GRAY);
+
+        venus = new CelestialBody("Venus", 4.86747e24, 6051.8e3, new Vector3(0, 0
+                , 0), new Vector3(0, 0, 0), StdDraw.PINK);
+
+        earth = new CelestialBody("Earth", 5.97237e24, 6371.0084e3, new Vector3(0, 0, 0),
+                new Vector3(0, 0, 0), StdDraw.BLUE);
+
+        mars = new CelestialBody("Mars", 0.641712e24, 3389.5e3, new Vector3(0, 0, 0),
+                new Vector3(0, 0, 0), StdDraw.RED);
+
+
+        CelestialSystem ss = new CelestialSystem("Solarsystem");
+        ss.add(mercury);
+        ss.add(venus);
+        ss.add(earth);
+        ss.add(mars);
+
+        try {
+            ReadDataUtil.readConfiguration("Hell", ss, 21);
+            ss.add(sun);
+        } catch (FileNotFoundException | FileFormatException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -114,7 +156,7 @@ public class Simulation {
 
     }
 
-    private static void solarSystemSimulation() {
+    private static void solarSystemSimulation() throws FileNotFoundException, FileFormatException {
         //TODO: change implementation of this method according to 'Aufgabenblatt2.md'.
         CelestialSystem bodies = ReadDataUtil.initialize(60);
         Vector3[] forceOnBody = new Vector3[bodies.size()];
